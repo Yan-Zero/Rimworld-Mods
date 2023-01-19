@@ -11,63 +11,25 @@ using Verse;
 
 namespace PPC_Plugin
 { 
-	[StaticConstructorOnStartup]
-    public class PPC_Plugin
+	[DefOf]
+    public class PPCDef
 	{
-		public static Harmony Harmony;
-		public static RimatomicResearchDef Project = null;
-		public static ThingDef PPCP = null;
+		public static ThingDef PPC_Plugin;
 
-		static PPC_Plugin()
+		/// <summary>
+		/// Patch
+		/// </summary>
+		static PPCDef()
         {
 			var _this = typeof(Util_Fix);
-			Harmony = new Harmony("Yan.PPC_Plugin");
+            Harmony harmony = new Harmony("Yan.PPCDef");
 
-			Harmony.Patch(AccessTools.Constructor(typeof(CompProperties_Battery)), new HarmonyMethod(_this, "CompProperties_Battery"));
-			Harmony.Patch(AccessTools.Method("Rimatomics.PPC_Util:DissipateCharge"), new HarmonyMethod(_this, "DissipateCharge"));
-            Harmony.Patch(AccessTools.Method("Rimatomics.PPC_Util:HasCharge"), new HarmonyMethod(_this, "HasCharge"));
+			harmony.Patch(AccessTools.Constructor(typeof(CompProperties_Battery)), new HarmonyMethod(_this, "CompProperties_Battery"));
+			harmony.Patch(AccessTools.Method("Rimatomics.PPC_Util:DissipateCharge"), new HarmonyMethod(_this, "DissipateCharge"));
+            harmony.Patch(AccessTools.Method("Rimatomics.PPC_Util:HasCharge"), new HarmonyMethod(_this, "HasCharge"));
 			Log.Message("[PPCP] Patched Rimatomics");
 
-			LongEventHandler.QueueLongEvent(PPCP_Fix, "PPC Plugin Fix" , true, null);
-		}
-
-		public static void PPCP_Fix()
-        {
-			Log.Message("[PPCP] PPCP Loadding");
-			Project = DefDatabase<RimatomicResearchDef>.GetNamed("Research_PPC_Plugin");
-			PPCP = DefDatabase<ThingDef>.GetNamed("PPC_Plugin");
-			var add_comp = new CompProperties_Upgradable()
-			{
-				upgrades = {
-						new Upgrades() {
-							project = Project
-						}
-					}
-			};
-			try
-            {
-				foreach (var x in DefDatabase<ThingDef>.AllDefs)
-				{
-					var flag = false;
-					foreach (var i in x.comps)
-                    {
-						if (i.GetType() == typeof(CompProperties_Battery))
-						{
-							i.compClass = typeof(CompPPC);
-							flag = true;
-						}
-					}
-					if (x.defName == "PPC")
-						continue;
-					if (!flag)
-						continue;
-					x.comps.Add(add_comp);
-				};
-			}
-			finally
-			{ 
-				Log.Message("[PPCP] PPCP Loadded");
-			}
+            DefOfHelper.EnsureInitializedInCtor(typeof(PPCDef));
 		}
 	}
 
@@ -97,7 +59,6 @@ namespace PPC_Plugin
 
 	}
 
-
 	public static class Util_Fix
     {
 		public static PPC_MC PPCPlugin(this Map map)
@@ -108,16 +69,25 @@ namespace PPC_Plugin
 			return PPC_MC.loccachecomp;
 		}
 
-		public static bool HasCharge(ref bool __result, PowerNet PowerNet, float charge)
+        /// <summary>
+        /// Patch PPC_Util 的 HasCharge。是判断电量是否大于 charge
+        /// </summary>
+        /// <param name="__result"></param>
+        /// <param name="PowerNet"></param>
+        /// <param name="charge"></param>
+        /// <returns></returns>
+        public static bool HasCharge(ref bool __result, PowerNet PowerNet, float charge)
 		{
+			// 查找PPC，或者安装了PPC插件的电池。
 			List<CompPowerBattery> list = (from x in PowerNet.Map.Rimatomics().PPCs
 										   where x.PowerComp.PowerNet == PowerNet
 										   select x.batt into x
 										   where x.StoredEnergy > 0f
 										   select x).ToList();
 			list.AddRange(from x in PowerNet.Map.PPCPlugin().CPBs
-						  where x.PowerNet == PowerNet && x.StoredEnergy > 0f && x.parent.GetComp<CompUpgradable>().HasUpgrade(PPC_Plugin.PPCP)
+						  where x.PowerNet == PowerNet && x.StoredEnergy > 0f && x.parent.GetComp<CompUpgradable>().HasUpgrade(PPCDef.PPC_Plugin)
 						  select x);
+
 			if (list.NullOrEmpty())
             {
 				__result = false;
@@ -131,16 +101,16 @@ namespace PPC_Plugin
 			__result = false;
 			return false;
 		}
+
 		public static bool DissipateCharge(ref bool __result, PowerNet PowerNet, float charge)
 		{
-			Log.Warning("PPC Plugin DissipateCharge");
 			List<CompPowerBattery> list = (from x in PowerNet.Map.Rimatomics().PPCs
 										   where x.PowerComp.PowerNet == PowerNet
 										   select x.batt into x
 										   where x.StoredEnergy > 0f
 										   select x).ToList();
 			list.AddRange(from x in PowerNet.Map.PPCPlugin().CPBs
-						  where x.PowerNet == PowerNet && x.StoredEnergy > 0f && x.parent.GetComp<CompUpgradable>().HasUpgrade(PPC_Plugin.PPCP)
+						  where x.PowerNet == PowerNet && x.StoredEnergy > 0f && x.parent.GetComp<CompUpgradable>().HasUpgrade(PPCDef.PPC_Plugin)
 						  select x);
 
 			if (list.NullOrEmpty())
@@ -181,6 +151,7 @@ namespace PPC_Plugin
 			__result = true;
 			return false;
 		}
+
 		public static bool CompProperties_Battery(ref CompProperties_Battery __instance)
         {
 			__instance.compClass = typeof(CompPPC);
@@ -188,7 +159,10 @@ namespace PPC_Plugin
         }
 	}
 
-	public class CompPPC : CompPowerBattery
+    /// <summary>
+    /// 替换 CompPowerBattery 的
+    /// </summary>
+    public class CompPPC : CompPowerBattery
 	{
 		public bool is_PPC = false;
 
@@ -209,6 +183,7 @@ namespace PPC_Plugin
 			if (!parent.Map.Rimatomics().Upgradables.Contains(parent))
 				parent.Map.Rimatomics().Upgradables.Add(parent);
 		}
+
 		public override void PostDeSpawn(Map map)
 		{
 			if (!is_PPC)
@@ -221,4 +196,11 @@ namespace PPC_Plugin
 			base.PostDeSpawn(map);
 		}
 	}
+    public class CompProperties_PPC : CompProperties_Battery
+    {
+        public CompProperties_PPC()
+        {
+            compClass = typeof(CompPPC);
+        }
+    }
 }
