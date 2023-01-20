@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+  <NoExtractableGene>No genepack is stored.</NoExtractableGene>
+  <SplitGenes_Confirmation>This action will change the pawn's xenogenic gene!</SplitGenes_Confirmation>
+  <SplitGenes>Split Genepack</SplitGenes>
+  <SplitGenesDesc>This action will extract one gene from the genepack, but it will consume the genepack and one pawn.</SplitGenesDesc>
+  <CanNotStopSplitting>Can not stop splitting genepack.</CanNotStopSplitting>
+
+</LanguageData>

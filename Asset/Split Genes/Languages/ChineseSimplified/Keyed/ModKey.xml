@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+  <NoExtractableGene>当前设备没有存储基因</NoExtractableGene>
+  <SplitGenes_Confirmation>这将会改变该小人基因！</SplitGenes_Confirmation>
+  <SplitGenes>分离基因</SplitGenes>
+  <SplitGenesDesc>这个操作将从基因组中提取一个基因，但它会消耗基因组和一个小人。</SplitGenesDesc>
+  <CanNotStopSplitting>无法终止提取过程。</CanNotStopSplitting>
+
+</LanguageData>

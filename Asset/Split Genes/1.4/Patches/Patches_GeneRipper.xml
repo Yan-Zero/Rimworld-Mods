@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Patch>
+
+  <Operation Class="PatchOperationReplace">
+    <xpath>/Defs/ThingDef[defName="GeneRipper"]/comps/li[@Class="CompProperties_Power"]/basePowerConsumption</xpath>
+    <value>
+      <basePowerConsumption>500</basePowerConsumption>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ThingDef[defName="GeneRipper"]</xpath>
+    <value>
+      <inspectorTabs>
+        <li>ITab_ContentsGenepackHolder</li>
+      </inspectorTabs>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ThingDef[defName="GeneRipper"]/comps</xpath>
+    <value>
+      <li Class="Split_Genes.CompProperties_GenepackContainer">
+        <maxCapacity>1</maxCapacity>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

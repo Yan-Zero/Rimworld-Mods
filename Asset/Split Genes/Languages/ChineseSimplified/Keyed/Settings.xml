@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+  <SplitGenes_SplitHours>分离耗时</SplitGenes_SplitHours>
+  <SplitGenes_SplitHoursTooltip>需要多余的时间去分离基因，具体耗时是，提取+分离。</SplitGenes_SplitHoursTooltip>
+
+</LanguageData>

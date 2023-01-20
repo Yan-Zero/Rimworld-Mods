@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+  <SplitGenes_SplitHours>Splitting time (h)</SplitGenes_SplitHours>
+  <SplitGenes_SplitHoursTooltip>It takes extra time to split the genes. The actual time includes extraction.</SplitGenes_SplitHoursTooltip>
+
+</LanguageData>

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Split Genes</name>
+  <author>Yan</author>
+  <supportedVersions>
+	  <li>1.4</li>
+  </supportedVersions>
+  <packageId>Yan.SplitGenes</packageId>
+  <loadAfter>
+    <li>brrainz.harmony</li>
+    <li>DanielWedemeyer.GeneRipper</li>
+  </loadAfter>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+    </li>
+    <li>
+      <packageId>DanielWedemeyer.GeneRipper</packageId>
+      <displayName>Gene Ripper</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2885485814</steamWorkshopUrl>
+    </li>
+  </modDependencies>
+  <description>
+This mod adds a function to Gene Ripper - Splitting Genepack. 
+Although the mod "Split Genepack" has a similar function, I believe it is too overpowered. Therefore, I have set some limitations for splitting genepack in this mod. 
+The basic power consumption for Gene Ripper has been changed to 500W in this mod, and the process of splitting genepack cannot be stopped. Additionally, it will consume the genepack, and only one gene will be extracted. Pawns are required, and the pawn will die after extracting the gene.
+
+Now, you can make the Gene Ripper finish its work immediately.
+After splitting genes, the pawn is likely not to die.
+
+在用了一会Split Genepack后，觉得还行，但是不是很行。Split Genepack 太过于正义了（
+本 Mod 依赖于 Gene Ripper，和 Gene Ripper 的提取基因组不同，本 Mod 是提取基因组里面的基因。
+基因提取器的耗电量被我翻倍了（从两百变成了五百）。
+好了，现在你可以把把时间消耗改成0h。
+
+注意：提取的人异种基因会被置换！并且此行为会消耗该基因组。过程无法暂停！但是小人有概率不死。
+
+  </description>
+</ModMetaData>
